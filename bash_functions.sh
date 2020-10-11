@@ -200,6 +200,11 @@ setup_cache_size() {
     # Quietly exit early for empty or default
     if [[ -z "${1}" || "${1}" == '10000' ]] ; then return ; fi
 
+    if [[ "${DNSSEC}" == "true" ]] ; then
+        echo "$warning - Cannot change cache size if DNSSEC is enabled"
+        return
+    fi
+
     if ! echo $1 | grep -q '^[0-9][0-9]*$' ; then
         echo "$warning - $1 is not an integer"
         return

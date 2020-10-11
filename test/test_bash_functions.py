@@ -70,6 +70,16 @@ def test_bad_input_to_CACHE_SIZE(Docker, Slow, test_args):
     Docker.run('. /bash_functions.sh ; setup_cache_size "${CACHE_SIZE}"')
     Slow(lambda: re.search(CONFIG_LINE, Docker.run('cat {}'.format(DNSMASQ_CONFIG)).stdout) != None)
 
+@pytest.mark.parametrize('test_args', [
+    '-e DNSSEC="true" -e CACHE_SIZE="0"',
+])
+def test_dnssec_enabled_with_CACHE_SIZE(Docker, Slow, test_args):
+    CONFIG_LINE = r'cache-size\s*=\s*10000'
+    DNSMASQ_CONFIG = '/etc/dnsmasq.d/01-pihole.conf'
+
+    Docker.run('. /bash_functions.sh ; setup_cache_size "${CACHE_SIZE}"')
+    Slow(lambda: re.search(CONFIG_LINE, Docker.run('cat {}'.format(DNSMASQ_CONFIG)).stdout) != None)
+
 
 # DNS Environment Variable behavior in combinations of modified pihole LTE settings
 @pytest.mark.skip('broke, needs investigation in v5.0 beta')
