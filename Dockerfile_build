@@ -17,7 +17,7 @@ COPY Pipfile* /root/
 WORKDIR /root
 
 RUN pipenv install --system \
-    && sed -i 's|/bin/sh|/bin/bash|g' /usr/local/lib/python3.9/site-packages/testinfra/backend/docker.py
+    && sed -i 's|/bin/sh|/bin/bash|g' /usr/local/lib/python3.8/site-packages/testinfra/backend/docker.py
 
 RUN echo "set -ex && Dockerfile.sh && \$@" > /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
