@@ -205,7 +205,7 @@ setup_cache_size() {
         return
     fi
 
-    if ! echo $1 | grep -q '^[0-9][0-9]*$' ; then
+    if ! echo $1 | grep -q '^[0-9]*$' ; then
         echo "$warning - $1 is not an integer"
         return
     fi
