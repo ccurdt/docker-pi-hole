@@ -24,6 +24,7 @@ export CONDITIONAL_FORWARDING_REVERSE
 export TEMPERATUREUNIT
 export ADMIN_EMAIL
 export WEBUIBOXEDLAYOUT
+export CACHE_SIZE
 
 export adlistFile='/etc/pihole/adlists.list'
 

@@ -139,6 +139,7 @@ setup_dnsmasq() {
     setup_dnsmasq_interface "$interface"
     setup_dnsmasq_listening_behaviour "$dnsmasq_listening_behaviour"
     setup_dnsmasq_user "${DNSMASQ_USER}"
+    setup_cache_size "${CACHE_SIZE}"
     ProcessDNSSettings
 }
 
@@ -191,6 +192,32 @@ setup_dnsmasq_hostnames() {
     else
         sed -i '/^address=\/@HOSTNAME@*/d' ${dnsmasq_pihole_01_location}
     fi
+}
+
+setup_cache_size() {
+    local warning="WARNING: Custom CACHE_SIZE not used"
+    local dnsmasq_pihole_01_location="/etc/dnsmasq.d/01-pihole.conf"
+    # Quietly exit early for empty or default
+    if [[ -z "${1}" || "${1}" == '10000' ]] ; then return ; fi
+
+    if [[ "${DNSSEC}" == "true" ]] ; then
+        echo "$warning - Cannot change cache size if DNSSEC is enabled"
+        return
+    fi
+
+    if ! echo $1 | grep -q '^[0-9]*$' ; then
+        echo "$warning - $1 is not an integer"
+        return
+    fi
+
+    local -i cache_size="$1"
+    if (( $cache_size < 0 )); then
+        echo "$warning - $cache_size is not a positive integer or zero"
+        return
+    fi
+    echo "Custom CACHE_SIZE set to $cache_size"
+
+    sed -i "s/^cache-size=\s*[0-9]*/cache-size=$cache_size/" ${dnsmasq_pihole_01_location}
 }
 
 setup_lighttpd_bind() {
