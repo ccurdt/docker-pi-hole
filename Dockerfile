@@ -14,6 +14,11 @@ ENV PIHOLE_INSTALL /root/ph_install.sh
 RUN bash -ex install.sh 2>&1 && \
     rm -rf /var/cache/apt/archives /var/lib/apt/lists/*
 
+# install whitelist from https://github.com/ccurdt/whitelist.git
+RUN apt-get update && apt-get install -y python3  
+RUN cd /opt && git clone https://github.com/ccurdt/whitelist.git 
+RUN echo "0 1 * * */7 root /opt/whitelist/scripts/whitelist.py" >/etc/cron.d/whitelist
+
 ENTRYPOINT [ "/s6-init" ]
 
 ADD s6/debian-root /
