@@ -17,6 +17,7 @@ RUN bash -ex install.sh 2>&1 && \
 # install whitelist from https://github.com/ccurdt/whitelist.git
 RUN apt-get update && apt-get install -y python3  
 RUN cd /opt && git clone https://github.com/ccurdt/whitelist.git 
+RUN chmod +x /opt/whitelist/scripts/whitelist.py
 RUN echo "0 1 * * */7 root /opt/whitelist/scripts/whitelist.py" >/etc/cron.d/whitelist
 
 ENTRYPOINT [ "/s6-init" ]
